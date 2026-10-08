@@ -1,36 +1,86 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# 🛒 বাজার দর
 
-## Getting Started
+বাংলাদেশের বিভিন্ন বাজারের প্রয়োজনীয় পণ্যের আজকের দাম এক নজরে দেখার জন্য তৈরি একটি responsive web application।
 
-First, run the development server:
+## 🔗 Live Website
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+Coming soon...
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 📌 Project Description
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+বাজার দর একটি সহজ এবং user-friendly market price application। এখানে ব্যবহারকারী বিভিন্ন প্রয়োজনীয় পণ্যের বর্তমান দাম, দাম বাড়া-কমার তথ্য এবং বিভিন্ন বাজারের price range দেখতে পারবেন।
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+ব্যবহারকারী category অনুযায়ী পণ্য দেখতে পারবেন এবং নির্দিষ্ট product-এর বিস্তারিত তথ্য দেখতে পারবেন।
 
-## Learn More
+## 🛠️ Technologies Used
 
-To learn more about Next.js, take a look at the following resources:
+- Next.js
+- React
+- JavaScript
+- Tailwind CSS
+- Better Auth
+- MongoDB
+- REST API
+- Lucide React
+- React Hot Toast
+- Vercel
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## ✨ Features
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### 🏠 Home Page
+- আজকের বাজারদরের Hero section
+- Rising products
+- Falling products
+- সব পণ্যের তালিকা
+- Responsive product grid
 
-## Deploy on Vercel
+### 📊 Product Information
+- পণ্যের বর্তমান দাম
+- বাংলা সংখ্যায় price
+- Unit information
+- Price increase/decrease percentage
+- Minimum price
+- Maximum price
+- Average price
+- Market-wise price
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### 🗂️ Category
+- Category অনুযায়ী product filtering
+- Active category navigation
+- Low to high sorting
+- High to low sorting
+- Default sorting
+- Empty category state
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### 🔐 Authentication
+- Email and password signup
+- Email and password signin
+- Google login
+- GitHub login
+- Sign out
+- Protected product details
+- Profile update
+
+### 📱 Responsive Design
+- Mobile friendly
+- Tablet friendly
+- Desktop friendly
+- Responsive navigation
+- Responsive product cards
+
+### ⚡ User Experience
+- Loading skeleton
+- Toast notifications
+- Custom 404 page
+- Invalid product state
+- Invalid category state
+- Price ticker
+- Bengali date
+- Bengali numbers
+
+## 🔌 API
+
+The application uses the following API:
+
+```text
+https://api.api-store.workers.dev/api/bazardor

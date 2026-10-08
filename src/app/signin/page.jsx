@@ -12,43 +12,66 @@ export default function SigninPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const [socialLoading, setSocialLoading] = useState("");
 
   async function handleSignin(e) {
     e.preventDefault();
 
-    setLoading(true);
-
-    const { error } = await authClient.signIn.email({
-      email,
-      password,
-    });
-
-    setLoading(false);
-
-    if (error) {
-      toast.error(error.message || "ইমেইল অথবা পাসওয়ার্ড ভুল");
+    if (!email || !password) {
+      toast.error("ইমেইল এবং পাসওয়ার্ড দিন");
       return;
     }
 
-    toast.success("সফলভাবে সাইন ইন হয়েছে!");
-    router.push("/");
-    router.refresh();
+    setLoading(true);
+
+    try {
+      const { error } = await authClient.signIn.email({
+        email,
+        password,
+      });
+
+      if (error) {
+        toast.error(error.message || "ইমেইল অথবা পাসওয়ার্ড ভুল");
+        return;
+      }
+
+      toast.success("সফলভাবে সাইন ইন হয়েছে!");
+
+      router.push("/");
+      router.refresh();
+    } catch (error) {
+      console.error(error);
+      toast.error("সাইন ইন করতে সমস্যা হয়েছে");
+    } finally {
+      setLoading(false);
+    }
   }
 
   async function handleSocialLogin(provider) {
-    const { error } = await authClient.signIn.social({
-      provider,
-      callbackURL: "/",
-    });
+    setSocialLoading(provider);
 
-    if (error) {
-      toast.error(error.message || "Social login failed");
+    try {
+      const { error } = await authClient.signIn.social({
+        provider,
+        callbackURL: "http://localhost:3000/",
+      });
+
+      if (error) {
+        console.error(error);
+        toast.error(error.message || "Social login failed");
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error("Social login করতে সমস্যা হয়েছে");
+    } finally {
+      setSocialLoading("");
     }
   }
 
   return (
     <main className="flex min-h-screen items-center justify-center bg-[#fffdf7] px-4 py-10">
       <div className="w-full max-w-md rounded-3xl bg-white p-6 shadow-sm md:p-8">
+        
         <div className="text-center">
           <Link href="/" className="text-2xl font-bold">
             🛒 বাজার দর
@@ -63,27 +86,37 @@ export default function SigninPage() {
           </p>
         </div>
 
-        <div className="mt-8 grid gap-3 sm:grid-cols-2">
+        <div className="mt-8 grid gap-3">
           <button
             type="button"
             onClick={() => handleSocialLogin("google")}
-            className="rounded-xl border px-4 py-3 font-medium hover:bg-gray-50"
+            disabled={socialLoading !== ""}
+            className="flex w-full items-center justify-center rounded-xl border px-4 py-3 font-medium transition hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50"
           >
-            Google দিয়ে লগইন
+            {socialLoading === "google"
+              ? "Google দিয়ে লগইন হচ্ছে..."
+              : "Google দিয়ে লগইন"}
           </button>
 
           <button
             type="button"
             onClick={() => handleSocialLogin("github")}
-            className="rounded-xl border px-4 py-3 font-medium hover:bg-gray-50"
+            disabled={socialLoading !== ""}
+            className="flex w-full items-center justify-center rounded-xl border px-4 py-3 font-medium transition hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50"
           >
-            GitHub দিয়ে লগইন
+            {socialLoading === "github"
+              ? "GitHub দিয়ে লগইন হচ্ছে..."
+              : "GitHub দিয়ে লগইন"}
           </button>
         </div>
 
         <div className="my-6 flex items-center gap-3">
           <div className="h-px flex-1 bg-gray-200" />
-          <span className="text-sm text-gray-400">অথবা</span>
+
+          <span className="text-sm text-gray-400">
+            অথবা
+          </span>
+
           <div className="h-px flex-1 bg-gray-200" />
         </div>
 
@@ -99,7 +132,7 @@ export default function SigninPage() {
               onChange={(e) => setEmail(e.target.value)}
               placeholder="example@email.com"
               required
-              className="w-full rounded-xl border px-4 py-3 outline-none focus:border-black"
+              className="w-full rounded-xl border px-4 py-3 outline-none transition focus:border-black"
             />
           </div>
 
@@ -114,14 +147,14 @@ export default function SigninPage() {
               onChange={(e) => setPassword(e.target.value)}
               placeholder="আপনার পাসওয়ার্ড"
               required
-              className="w-full rounded-xl border px-4 py-3 outline-none focus:border-black"
+              className="w-full rounded-xl border px-4 py-3 outline-none transition focus:border-black"
             />
           </div>
 
           <button
             type="submit"
             disabled={loading}
-            className="w-full rounded-xl bg-black px-4 py-3 font-medium text-white disabled:opacity-50"
+            className="w-full rounded-xl bg-black px-4 py-3 font-medium text-white transition hover:bg-gray-800 disabled:cursor-not-allowed disabled:opacity-50"
           >
             {loading ? "সাইন ইন হচ্ছে..." : "সাইন ইন"}
           </button>
