@@ -1,4 +1,7 @@
 import Link from "next/link";
+import { headers } from "next/headers";
+import { redirect } from "next/navigation";
+import { auth } from "@/auth";
 import { getProduct } from "@/lib/api";
 
 const units = {
@@ -9,14 +12,24 @@ const units = {
 };
 
 export default async function ProductDetails({ params }) {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+
+  if (!session?.user) {
+    redirect("/signin");
+  }
+
   const { slug } = await params;
   const product = await getProduct(slug);
 
   if (!product) {
     return (
-      <main className="flex min-h-screen items-center justify-center px-4">
+      <main className="flex min-h-screen items-center justify-center bg-[#fffdf7] px-4">
         <div className="text-center">
-          <h1 className="text-4xl font-bold">পণ্য পাওয়া যায়নি</h1>
+          <h1 className="text-4xl font-bold">
+            পণ্য পাওয়া যায়নি
+          </h1>
 
           <p className="mt-3 text-gray-500">
             আপনি যে পণ্যটি খুঁজছেন সেটি পাওয়া যায়নি।
@@ -40,8 +53,10 @@ export default async function ProductDetails({ params }) {
 
   const minimum = Math.min(...prices);
   const maximum = Math.max(...prices);
+
   const average = Math.round(
-    prices.reduce((sum, price) => sum + price, 0) / prices.length
+    prices.reduce((sum, price) => sum + price, 0) /
+      prices.length
   );
 
   const isUp = product.change.dir === "up";
@@ -135,7 +150,17 @@ export default async function ProductDetails({ params }) {
 
             {isDown && (
               <span className="rounded-full bg-red-100 px-4 py-2 font-medium text-red-700">
-                ▼ {Math.abs(product.change.pct).toLocaleString("bn-BD")}%
+                ▼{" "}
+                {Math.abs(product.change.pct).toLocaleString(
+                  "bn-BD"
+                )}
+                %
+              </span>
+            )}
+
+            {!isUp && !isDown && (
+              <span className="rounded-full bg-gray-100 px-4 py-2 font-medium text-gray-600">
+                — ০.০%
               </span>
             )}
           </div>
