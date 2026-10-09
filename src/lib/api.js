@@ -1,42 +1,38 @@
-const BASE_URL =
-  "https://api.api-store.workers.dev/api/bazardor";
 
-export async function getProducts() {
-  const res = await fetch(`${BASE_URL}/products`);
+const BASE_URL = "https://api.api-store.workers.dev/api/bazardor";
+
+async function fetchAPI(endpoint) {
+  const res = await fetch(`${BASE_URL}${endpoint}`, {
+    cache: "no-store",
+  });
 
   if (!res.ok) {
-    throw new Error("Failed to fetch products");
+    throw new Error(`API Error: ${res.status} ${endpoint}`);
   }
 
   return res.json();
+}
+
+export async function getProducts() {
+  return fetchAPI("/products");
 }
 
 export async function getCategories() {
-  const res = await fetch(`${BASE_URL}/categories`);
-
-  if (!res.ok) {
-    throw new Error("Failed to fetch categories");
-  }
-
-  return res.json();
+  return fetchAPI("/categories");
 }
 
 export async function getProduct(slug) {
-  const res = await fetch(`${BASE_URL}/products/${slug}`);
-
-  if (!res.ok) {
+  try {
+    return await fetchAPI(`/products/${slug}`);
+  } catch {
     return null;
   }
-
-  return res.json();
 }
 
 export async function getCategory(slug) {
-  const res = await fetch(`${BASE_URL}/categories/${slug}`);
-
-  if (!res.ok) {
+  try {
+    return await fetchAPI(`/categories/${slug}`);
+  } catch {
     return null;
   }
-
-  return res.json();
 }
