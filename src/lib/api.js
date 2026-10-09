@@ -14,24 +14,61 @@ async function fetchAPI(endpoint) {
 }
 
 export async function getProducts() {
-  return fetchAPI("/products");
+  const data = await fetchAPI("/products");
+
+  // API সরাসরি array অথবা object-এর ভেতরে products দিতে পারে
+  if (Array.isArray(data)) return data;
+  if (Array.isArray(data.products)) return data.products;
+  if (Array.isArray(data.data)) return data.data;
+
+  return [];
 }
 
 export async function getCategories() {
-  return fetchAPI("/categories");
+  const data = await fetchAPI("/categories");
+
+  if (Array.isArray(data)) return data;
+  if (Array.isArray(data.categories)) return data.categories;
+  if (Array.isArray(data.data)) return data.data;
+
+  return [];
 }
 
 export async function getProduct(slug) {
   try {
-    return await fetchAPI(`/products/${slug}`);
+    const product = await fetchAPI(
+      `/products/${encodeURIComponent(slug)}`
+    );
+
+    if (product && !product.error) {
+      return product;
+    }
   } catch {
+    // Details endpoint কাজ না করলে products list থেকে খুঁজব
+  }
+
+  try {
+    const products = await getProducts();
+
+    return (
+      products.find(
+        (product) =>
+          product.slug === slug ||
+          product.id === slug ||
+          product._id === slug
+      ) || null
+    );
+  } catch (error) {
+    console.error("Product fetch failed:", error);
     return null;
   }
 }
 
 export async function getCategory(slug) {
   try {
-    return await fetchAPI(`/categories/${slug}`);
+    return await fetchAPI(
+      `/categories/${encodeURIComponent(slug)}`
+    );
   } catch {
     return null;
   }
