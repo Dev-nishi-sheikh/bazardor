@@ -6,13 +6,13 @@ import { MongoClient } from "mongodb";
 const uri = process.env.MONGODB_URI;
 
 if (!uri) {
-  throw new Error("MONGODB_URI is missing in .env.local");
+  throw new Error("MONGODB_URI environment variable is missing");
 }
 
 const globalForMongo = globalThis;
 
 const client =
-  globalForMongo.mongoClient ||
+  globalForMongo.mongoClient ??
   new MongoClient(uri, {
     serverSelectionTimeoutMS: 10000,
   });
@@ -34,16 +34,15 @@ export const auth = betterAuth({
     autoSignIn: true,
   },
 
- 
-socialProviders: {
-  google: {
-    clientId: process.env.GOOGLE_CLIENT_ID,
-    clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-  },
-  github: {
-    clientId: process.env.GITHUB_CLIENT_ID,
-    clientSecret: process.env.GITHUB_CLIENT_SECRET,
-  },
-},
+  socialProviders: {
+    google: {
+      clientId: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+    },
 
+    github: {
+      clientId: process.env.GITHUB_CLIENT_ID,
+      clientSecret: process.env.GITHUB_CLIENT_SECRET,
+    },
+  },
 });

@@ -73,3 +73,4 @@ export async function getCategory(slug) {
     return null;
   }
 }
+
