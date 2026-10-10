@@ -81,6 +81,7 @@ Coming soon...
 ## 🔌 API
 
 The application uses the following API:
+ble ble ble....
 
 ```text
 https://api.api-store.workers.dev/api/bazardor
